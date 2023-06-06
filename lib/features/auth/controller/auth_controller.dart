@@ -1,3 +1,4 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,17 @@ final authControllerProvider = StateNotifierProvider<AuthController, bool>(
     );
   },
 );
+final currentUserDetialsProvider = FutureProvider((ref) async {
+  final currentUserData = ref.watch(currentUserAccProvider).value!.$id;
+  print(currentUserData);
+  final userData = ref.watch(userDetialsProvider(currentUserData));
+
+  return userData.value;
+});
+final userDetialsProvider = FutureProvider.family((ref, String uid) async {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
+});
 final currentUserAccProvider = FutureProvider((ref) async {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.currentUser();
@@ -30,7 +42,7 @@ class AuthController extends StateNotifier<bool> {
       : _authApi = authApi,
         _userApi = userApi,
         super(false);
-  Future<Model?> currentUser() => _authApi.currentUser();
+  Future<User?> currentUser() => _authApi.currentUser();
   void signup(
       {required String email,
       required String password,
@@ -47,7 +59,7 @@ class AuthController extends StateNotifier<bool> {
           following: [],
           profilePic: '',
           bannerPic: '',
-          uid: '',
+          uid:r.$id,
           bio: '',
           isTwitterBlue: false);
       final res2 = await _userApi.saveUserData(userModel);
@@ -74,6 +86,12 @@ class AuthController extends StateNotifier<bool> {
     res.fold((l) => showSnackbar(context, l.message), (r) {
       Navigator.push(context, HomePage.route());
     });
+  }
+
+  Future<UserModel> getUserData(String uid) async {
+    final document = await _userApi.getUserData(uid);
+    final updateUser = UserModel.fromMap(document.data);
+    return updateUser;
   }
 }
 //abstract class=>class implement=>provider=>controller=>state loading with bool=>

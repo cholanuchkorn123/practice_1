@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:riverpod_freezed/theme/pallete.dart';
 
+import '../features/tweet/widgets/tweet_list.dart';
 import 'assets_constant.dart';
 
 class UIconstant {
@@ -17,7 +18,7 @@ class UIconstant {
   }
 
   static const List<Widget> pageScreen = [
-    Text('feed'),
+    TweetList(),
     Text('search'),
     Text('noti')
   ];

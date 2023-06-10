@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:riverpod_freezed/common/common.dart';
 import 'package:riverpod_freezed/core/core.dart';
+
 import 'package:riverpod_freezed/features/auth/controller/auth_controller.dart';
+import 'package:riverpod_freezed/features/tweet/controller/tweet_controller.dart';
 
 import '../../../constant/assets_constant.dart';
 import '../../../theme/pallete.dart';
@@ -34,10 +36,19 @@ class _CreateTweetPageState extends ConsumerState<CreateTweetPage> {
     setState(() {});
   }
 
+  void shareTweet() {
+    ref.read(tweetControllerProvider.notifier).shareTweet(
+          images: image,
+          text: tweetTextController.text,
+          context: context,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetialsProvider).value;
-    return currentUser == null
+    final isLoading = ref.watch(tweetControllerProvider);
+    return isLoading || currentUser == null
         ? const Loader()
         : Scaffold(
             body: SafeArea(
@@ -45,7 +56,8 @@ class _CreateTweetPageState extends ConsumerState<CreateTweetPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -98,18 +110,24 @@ class _CreateTweetPageState extends ConsumerState<CreateTweetPage> {
               ),
             ),
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.close, size: 30),
+              leading: Padding(
+                padding: const EdgeInsets.only(top: 12, left: 12),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close, size: 30),
+                ),
               ),
               actions: [
-                Roundsmallbutton(
-                  ontap: () {},
-                  buttonText: 'Tweet',
-                  backgroundColor: Pallete.blueColor,
-                  fontColor: Pallete.whiteColor,
+                Padding(
+                  padding: const EdgeInsets.only(top: 12, right: 12),
+                  child: Roundsmallbutton(
+                    ontap: shareTweet,
+                    buttonText: 'Tweet',
+                    backgroundColor: Pallete.blueColor,
+                    fontColor: Pallete.whiteColor,
+                  ),
                 ),
               ],
             ),

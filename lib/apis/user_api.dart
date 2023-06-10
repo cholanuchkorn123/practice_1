@@ -41,7 +41,7 @@ class UserApi implements IUserApi {
 
   @override
   Future<Document> getUserData(String uid) {
-    print('this is uid $uid');
+   
     return _db.getDocument(
         databaseId: AppwriteConstant.dataBaseId,
         collectionId: AppwriteConstant.usersCollection,

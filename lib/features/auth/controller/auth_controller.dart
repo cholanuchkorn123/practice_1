@@ -1,4 +1,4 @@
-import 'package:appwrite/appwrite.dart';
+
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +21,7 @@ final authControllerProvider = StateNotifierProvider<AuthController, bool>(
 );
 final currentUserDetialsProvider = FutureProvider((ref) async {
   final currentUserData = ref.watch(currentUserAccProvider).value!.$id;
-  print(currentUserData);
+
   final userData = ref.watch(userDetialsProvider(currentUserData));
 
   return userData.value;
@@ -55,8 +55,8 @@ class AuthController extends StateNotifier<bool> {
       UserModel userModel = UserModel(
           email: email,
           name: getUsername(email),
-          followers: [],
-          following: [],
+          followers:const [],
+          following:const [],
           profilePic: '',
           bannerPic: '',
           uid:r.$id,

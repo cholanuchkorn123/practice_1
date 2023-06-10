@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:riverpod_freezed/constant/constant.dart';
-import 'package:riverpod_freezed/features/tweet/view/Create_tweet_Page.dart';
+
 
 import '../../../theme/pallete.dart';
+import '../../tweet/view/Create_tweet_Page.dart';
+
 
 class HomePage extends StatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => const HomePage());
